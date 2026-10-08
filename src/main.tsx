@@ -1,0 +1,11 @@
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { AppProvider } from "./app/app-provider.tsx";
+import "./styles/global.css";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <AppProvider />
+  </StrictMode>,
+);
