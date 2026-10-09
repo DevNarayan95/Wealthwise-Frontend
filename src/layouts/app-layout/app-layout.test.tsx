@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { AppLayout } from "./app-layout";
@@ -98,5 +104,70 @@ describe("AppLayout", () => {
     } finally {
       document.body.style.overflow = previousOverflow;
     }
+  });
+
+  it("moves focus to the first navigation link when opened", () => {
+    renderAppLayout();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+
+    const dialog = screen.getByRole("dialog", {
+      name: "Mobile navigation",
+    });
+    const firstLink = within(dialog).getAllByRole("link")[0];
+
+    expect(firstLink).toHaveFocus();
+  });
+
+  it("wraps focus to the first link when Tab is pressed on the last link", () => {
+    renderAppLayout();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+
+    const dialog = screen.getByRole("dialog", {
+      name: "Mobile navigation",
+    });
+    const links = within(dialog).getAllByRole("link");
+    const firstLink = links[0];
+    const lastLink = links[links.length - 1];
+
+    lastLink.focus();
+    fireEvent.keyDown(lastLink, { key: "Tab" });
+
+    expect(firstLink).toHaveFocus();
+  });
+
+  it("wraps focus to the last link when Shift+Tab is pressed on the first link", () => {
+    renderAppLayout();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+
+    const dialog = screen.getByRole("dialog", {
+      name: "Mobile navigation",
+    });
+    const links = within(dialog).getAllByRole("link");
+    const firstLink = links[0];
+    const lastLink = links[links.length - 1];
+
+    firstLink.focus();
+    fireEvent.keyDown(firstLink, { key: "Tab", shiftKey: true });
+
+    expect(lastLink).toHaveFocus();
+  });
+
+  it("restores focus to the menu toggle when closed with Escape", () => {
+    renderAppLayout();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+
+    const toggle = screen.getByRole("button", { name: "Close navigation" });
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(
+      screen.getByRole("button", { name: "Open navigation" }),
+    ).toHaveAttribute("aria-expanded", "false");
+
+    expect(toggle).toHaveFocus();
   });
 });

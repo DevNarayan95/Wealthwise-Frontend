@@ -16,6 +16,7 @@ export function AppHeader({
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <Button
+          id="mobile-navigation-toggle"
           variant="ghost"
           className="md:hidden"
           aria-label={navigationOpen ? "Close navigation" : "Open navigation"}
