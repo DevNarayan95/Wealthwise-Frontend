@@ -1,10 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "../App";
+import { AppLayout } from "../layouts/app-layout/app-layout";
+import { PublicLayout } from "../layouts/public-layout/public-layout";
+import { HomePage } from "./home-page";
 
 export const appRouter = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    element: <PublicLayout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+    ],
+  },
+  {
+    element: <AppLayout />,
+    children: [],
   },
 ]);
