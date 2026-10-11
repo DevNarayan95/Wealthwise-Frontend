@@ -1,3 +1,5 @@
+import type { ApiSuccessResponse } from "../../../lib/api/api.types";
+
 export interface User {
   id: string;
   email: string;
@@ -10,12 +12,6 @@ export interface User {
 export interface LoginRequest {
   email: string;
   password: string;
-}
-
-export interface ApiSuccessResponse<T> {
-  success: true;
-  data: T;
-  meta: Record<string, unknown>;
 }
 
 export interface LoginData {
